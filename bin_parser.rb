@@ -1,4 +1,6 @@
 class BinParser
+  #port of https://gist.github.com/jinahadam/a3fcd82166fd5b5bb72f
+  
   
   HEAD_BYTE1 = 0xA3
   HEAD_BYTE2 = 0x95
@@ -43,8 +45,8 @@ class BinParser
        type =  data[0..1].unpack('C')[0]
        length =  data[1..2].unpack('C')[0]
        name = data[2..5].unpack('Z*')[0]
-       format = data[5..21].unpack('Z*')
-       labels = data[21..86].unpack('Z*')
+       format = data[5..21].unpack('M*')[0]
+       labels = data[21..86].unpack('M*')[0].delete('\0')
        
        puts "FMT, #{type}, #{length}, #{name}, #{format}, #{labels}"
 
