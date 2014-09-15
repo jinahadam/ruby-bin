@@ -6,13 +6,14 @@ class BinParser
   HEAD_BYTE1 = 0xA3
   HEAD_BYTE2 = 0x95
   
-  attr_accessor :logformat
+  attr_accessor :logformat, :lines
   
    def initialize(uri)
     
      file = File.open(uri) 
      log_step = 0
      @logformat = []
+     @lines = []
      
      file.each_byte { |c| 
          
@@ -39,6 +40,10 @@ class BinParser
      
    end
    
+   def lines
+     @lines
+   end
+   
    def log_entry(packettype,file)
      type = ""
      
@@ -62,8 +67,7 @@ class BinParser
       # if lg[:name] == "GPS" ||  lg[:name] == "ATT" 
          @logformat << lg
       # end
-       puts "FMT, #{type}, #{length}, #{name}, #{format}, #{labels}"
-
+       @lines << "FMT, #{type}, #{length}, #{name}, #{format}, #{labels}"
        
      else 
        format = ""
@@ -81,7 +85,7 @@ class BinParser
          # puts "#{size} >>> length"
           #break  
           if size != 0 
-              process_message(file.read(size -2), name, format)
+             @lines << process_message(file.read(size -2), name, format)
           end
              
         end
@@ -91,6 +95,8 @@ class BinParser
        end
      end
    end
+   
+   
    
    def process_message(message, name, format) 
      offset = 0
@@ -147,8 +153,7 @@ class BinParser
         end
      end
      
-     puts line 
-      
+     line  
    end
    
    def float(offset,message)
