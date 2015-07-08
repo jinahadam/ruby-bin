@@ -1,4 +1,4 @@
-require 'debugger'
+#require 'debugger'
 
 class BinParser
   #port of https://gist.github.com/jinahadam/a3fcd82166fd5b5bb72f
